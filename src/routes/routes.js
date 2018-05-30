@@ -27,11 +27,6 @@ module.exports = app => {
       }
     }
     `
-
-    // return request.request(graphqlApi, mutation)
-    //   .then(data => console.log(data.signup))
-    //   .catch(e => console.log(e))
-
     // Cognito
     createCognitoUser({
       username: email,
@@ -39,7 +34,7 @@ module.exports = app => {
       email,
       phone: ''
     })
-      .then(data => request.request(graphqlApi, mutation))
+      .then(data => request.request(graphqlApi, mutation)) // GraphQL request to create user
       .then((data) => res.status(201).send({ message: "GraphQL Success", data }))
       .catch(e => res.status(400).send({error: e}))
   })
