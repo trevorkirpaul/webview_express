@@ -27,9 +27,9 @@ const authCognitoUser = (Username, Password) => {
 }
 
 // ? EXAMPLE USE OF AUTH USER FUNCTION
-authCognitoUser('newLocation@function.com', 'PASSword1987!')
-  .then(token => console.log('AUTH_SUCCESS', token))
-  .catch(err => console.log('AUTH_FAIL', err))
+// authCognitoUser('newLocation@function.com', 'PASSword1987!')
+//   .then(token => console.log('AUTH_SUCCESS', token))
+//   .catch(err => console.log('AUTH_FAIL', err))
 
 module.exports = {
   authCognitoUser

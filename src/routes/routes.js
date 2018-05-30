@@ -1,5 +1,6 @@
 const { createCognitoUser } = require('../cognitoMethods/createUser')
 const { deleteCognitoUser } = require('../cognitoMethods/deleteUser')
+const { authCognitoUser } = require('../cognitoMethods/authUser')
 
 module.exports = app => {
   //root
@@ -24,5 +25,12 @@ module.exports = app => {
     deleteCognitoUser(username)
       .then(data => res.status(303).send({ data }))
       .catch(e => res.status(400).send({ error: e }))
+  })
+  //auth user
+  app.post('/auth', (req, res, next) => {
+    const { body: { username, password } } = req
+    authCognitoUser(username, password)
+      .then(token => res.send({ token }))
+      .catch(err => res.send({ error: err }))
   })
 }
