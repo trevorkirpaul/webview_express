@@ -13,9 +13,11 @@
     "amazon-cognito-auth-js": "^1.2.0",
     "amazon-cognito-identity-js": "^2.0.6",
     "aws-sdk": "^2.248.1",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "graphql-request": "^1.6.0",
     "node-fetch-polyfill": "^2.0.6",
     "nodemon": "^1.17.5"
   }

@@ -1,6 +1,10 @@
+const request = require('graphql-request')
+const config = require('../config')
 const { createCognitoUser } = require('../cognitoMethods/createUser')
 const { deleteCognitoUser } = require('../cognitoMethods/deleteUser')
 const { authCognitoUser } = require('../cognitoMethods/authUser')
+
+const { graphqlApi } = config
 
 module.exports = app => {
   //root
@@ -10,13 +14,33 @@ module.exports = app => {
   //create user
   app.post('/user', (req, res, next) => {
     const { body: { email, password } } = req
+
+    const mutation = `
+    mutation {
+      signup(
+        email: "${email}"
+        password: "${password}"
+      ) {
+        id
+        email
+        password
+      }
+    }
+    `
+
+    // return request.request(graphqlApi, mutation)
+    //   .then(data => console.log(data.signup))
+    //   .catch(e => console.log(e))
+
+    // Cognito
     createCognitoUser({
       username: email,
       password,
       email,
       phone: ''
     })
-      .then(data => res.status(201).send({ data }))
+      .then(data => request.request(graphqlApi, mutation))
+      .then((data) => res.status(201).send({ message: "GraphQL Success", data }))
       .catch(e => res.status(400).send({error: e}))
   })
   //delete user
@@ -29,8 +53,10 @@ module.exports = app => {
   //auth user
   app.post('/auth', (req, res, next) => {
     const { body: { username, password } } = req
+
     authCognitoUser(username, password)
       .then(token => res.send({ token }))
       .catch(err => res.send({ error: err }))
   })
 }
+
