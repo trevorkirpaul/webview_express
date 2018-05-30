@@ -49,3 +49,19 @@ params:
   "password": "password of user requesting auth"
 }
 ```
+
+# Initial Setup
+
+## Setup
+
+In order to build and run this project, you will need to create `src/config.js` containing AWS credentials:
+
+```javascript
+// src/config.js
+module.exports = {
+  UserPoolId: //from AWS Cognito dashboard, 'General Settings'
+  ClientId: // from AWS Cognito dashboard, 'App Clients'
+  accessKeyId: // AWS developer credentials
+  secretAccessKey: // AWS developer credentials
+}
+```
