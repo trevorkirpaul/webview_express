@@ -1,10 +1,11 @@
 const request = require('graphql-request')
+const axios = require('axios')
 const config = require('../config')
 const { createCognitoUser } = require('../cognitoMethods/createUser')
 const { deleteCognitoUser } = require('../cognitoMethods/deleteUser')
 const { authCognitoUser } = require('../cognitoMethods/authUser')
 
-const { graphqlApi } = config
+const { graphqlApi, wordpressURI } = config
 
 module.exports = app => {
   //root
@@ -52,6 +53,31 @@ module.exports = app => {
     authCognitoUser(username, password)
       .then(token => res.send({ token }))
       .catch(err => res.send({ error: err }))
+  })
+
+  // wordpress
+  // ? Fetch all quizzes
+  app.get('/cms/quiz', (req, res, next) => {
+    // http://localhost/wp-json/acf/v3/quiz/
+    const request = axios.get(`${wordpressURI}wp-json/acf/v3/quiz`)
+    request
+      .then(({ data }) => {
+        const cleanData = data.map(quiz => quiz.acf)
+        const quizes = [...cleanData]
+        return res.send(quizes)
+      })
+      .catch(err => res.send({ err }))
+  })
+  // ? Fetch quiz by ID
+  app.get('/cms/quiz/:quiz', (req, res, next) => {
+    const { params } = req
+    const request = axios.get(`${wordpressURI}wp-json/acf/v3/quiz/${req.params.quiz}`)
+    request
+      .then(({ data }) => {
+        const quiz = data.acf
+        return res.send(quiz)
+      })
+      .catch(err => res.send({ err }))
   })
 }
 
